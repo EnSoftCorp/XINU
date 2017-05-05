@@ -54,6 +54,8 @@ char	vers[] = VERSION;	/* Xinu version printed at startup	*/
 /***								      ***/
 /************************************************************************/
 
+LOCAL sysinit();			/* initialize all of Xinu */
+
 /*------------------------------------------------------------------------
  *  nulluser  -- initialize system and become the null process (id==0)
  *------------------------------------------------------------------------
@@ -68,7 +70,6 @@ nulluser()				/* babysit CPU when no one home */
 		kprintf("\n");
 	else
 		kprintf("   (reboot %d)\n", reboot);
-	sysinit();			/* initialize all of Xinu */
 	kprintf("%u real mem\n",(unsigned)maxaddr+(unsigned)sizeof(int));
 	kprintf("%u avail mem\n",
 		(unsigned)maxaddr-(unsigned)(&end)+(unsigned)sizeof(int));
