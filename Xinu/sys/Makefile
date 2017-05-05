@@ -13,7 +13,8 @@ AFLAGS	=	-u $(INCDIR)/sys.s
 AS	=	as
 LD	=	ld
 AR	=	ar
-RANLIB	=	$(BINDIR)/ranlib11
+#RANLIB	=	$(BINDIR)/ranlib11
+RANLIB	=	echo "Skipping ranlib11 - PDP11 tools not available"
 LORDER	=	$(BINDIR)/lorder11
 LIB	=	$(DIR)/lib
 DOWNLOAD=	$(BINDIR)/download
@@ -24,6 +25,7 @@ ODT	=	$(BINDIR)/odt
 .c.o:
 		$(CC) $(CFLAGS)	$<
 .s.o:
+# NOTE: assembly files have been disabled until an assembler can be configured or the assembly can be ported
 	@echo not assembling $<
 #		$(CC) $(CFLAGS)	$<
 
@@ -89,13 +91,17 @@ SFILES=		cksum.s clkint.s csv.s ctxsw.s		\
 		netutil.s				\
 		panic.s					\
 		setclkr.s sizmem.s startup.s
+	
+# separated objects originating from assembly; cannot build PDP11 assembly yet
+OFILES_FROM_SFILES=	cksum.o clkint.o csv.o ctxsw.o	\
+		ioint.o lowcore.o netutil.o panic.o setclkr.o \
+		sizmem.o	 startup.o
 
 OFILES=		access.o adump.o arp_in.o arpfind.o	\
 		arpinit.o				\
 		blkcopy.o blkequ.o bpdump.o		\
-		chprio.o ckmode.o cksum.o clkinit.o	\
+		chprio.o ckmode.o	\
 		clkint.o close.o control.o create.o	\
-		csv.o ctxsw.o				\
 		devdump.o dfalloc.o dfdsrch.o dgalloc.o	\
 		dgclose.o dgcntl.o dgdump.o dginit.o	\
 		dgmcntl.o dgmopen.o dgparse.o dgread.o	\
@@ -113,7 +119,7 @@ OFILES=		access.o adump.o arp_in.o arpfind.o	\
 		ibclear.o ibfree.o ibget.o iblfree.o	\
 		ibnew.o ibput.o icmp_in.o init.o	\
 		insert.o insertd.o ioerr.o ioinit.o	\
-		ioint.o ionull.o ip2name.o ip_in.o	\
+		ionull.o ip2name.o ip_in.o	\
 		ipsend.o				\
 		kill.o kprintf.o			\
 		lfclose.o lfgetc.o lfinit.o lfputc.o	\
@@ -122,10 +128,10 @@ OFILES=		access.o adump.o arp_in.o arpfind.o	\
 		mark.o mdump.o mkarp.o mkpool.o mount.o	\
 		naminit.o nammap.o namopen.o namrepl.o	\
 		ndump.o netdump.o netin.o netinit.o	\
-		netnum.o netout.o netutil.o newqueue.o	\
+		netnum.o netout.o newqueue.o	\
 		nqalloc.o				\
 		open.o					\
-		panic.o pcount.o pcreate.o pdelete.o	\
+		pcount.o pcreate.o pdelete.o	\
 		pinit.o poolinit.o prdump.o preceive.o	\
 		preset.o psend.o ptclear.o putc.o	\
 		qdump.o queue.o				\
@@ -137,9 +143,9 @@ OFILES=		access.o adump.o arp_in.o arpfind.o	\
 		rfread.o rfseek.o rfsend.o rfwrite.o	\
 		route.o rwho.o rwhod.o rwhoind.o	\
 		scount.o screate.o sdelete.o seek.o	\
-		send.o sendf.o setclkr.o setdev.o	\
+		send.o sendf.o setdev.o	\
 		setnok.o sh.o signal.o signaln.o	\
-		sizmem.o sleep.o sleep10.o sndrarp.o	\
+		sleep.o sleep10.o sndrarp.o	\
 		sreset.o ssclock.o suspend.o		\
 		tdump.o test.o ttycntl.o ttygetc.o	\
 		ttyiin.o ttyinit.o ttyoin.o ttyopen.o	\
@@ -148,8 +154,12 @@ OFILES=		access.o adump.o arp_in.o arpfind.o	\
 		unsleep.o userret.o			\
 		wait.o wakeup.o write.o			\
 		xdone.o
+#		$(OFILES_FROM_SFILES)  # PDP11 assembly disabled 
 
-XOFILES=	lowcore.o startup.o initialize.o conf.o
+XOFILES=	initialize.o conf.o
+#		$(XOFILES_FROM_SFILES)  # PDP11 assembly disabled 
+
+XOFILES_FROM_SFILES=lowcore.o startup.o
 
 HFILES=		../h/a.out.h ../h/arp.h ../h/bufpool.h	\
 		../h/cmd.h ../h/conf.h ../h/core11.h	\
